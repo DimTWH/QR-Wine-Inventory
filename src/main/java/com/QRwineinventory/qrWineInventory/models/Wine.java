@@ -1,4 +1,6 @@
 package com.QRwineinventory.qrWineInventory.models;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.UUID;
 public class Wine {
     private final UUID id;
@@ -11,7 +13,15 @@ public class Wine {
     private final int quantity;
     private final String image_pp;
 
-    public Wine(UUID id, String name, String vintage, float price, String color, String type, float alcohol, int quantity, String image_pp) {
+    public Wine(@JsonProperty("id") UUID id,
+                @JsonProperty("name") String name,
+                @JsonProperty("vintage") String vintage,
+                @JsonProperty("price") float price,
+                @JsonProperty("color") String color,
+                @JsonProperty("type") String type,
+                @JsonProperty("alcohol") float alcohol,
+                @JsonProperty("quantity") int quantity,
+                @JsonProperty("image_pp") String image_pp) {
         this.id = id;
         this.name = name;
         this.vintage = vintage;
