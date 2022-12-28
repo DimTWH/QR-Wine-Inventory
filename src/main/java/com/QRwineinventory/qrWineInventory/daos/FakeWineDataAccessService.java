@@ -13,7 +13,7 @@ public class FakeWineDataAccessService implements WineDao{
     private final static List<Wine> DB = new ArrayList<>();
     @Override
     public int insertWine(UUID id, Wine wine) {
-        DB.add(new Wine(id, wine.getName(), wine.getVintage(), wine.getPrice(), wine.getColor(), wine.getType(), wine.getAlcohol(), wine.getQuantity(), wine.getImage_pp()));
+        DB.add(new Wine(wine.getId(), id, wine.getBrandGrape(), wine.getWinery(), wine.getVintage(), wine.getPrice(), wine.getColor(), wine.getType(), wine.getAlcohol(), wine.getQuantity(), wine.getImage_pp()));
         return 1;
     }
 
@@ -25,7 +25,7 @@ public class FakeWineDataAccessService implements WineDao{
     @Override
     public Optional<Wine> selectWineById(UUID id) {
         return DB.stream()
-                .filter(wine -> wine.getId().equals(id))
+                .filter(wine -> wine.getUid().equals(id))
                 .findFirst();
     }
 
@@ -46,7 +46,19 @@ public class FakeWineDataAccessService implements WineDao{
                     int indexOfWineToUpdate = DB.indexOf(wineFound);
                     if (indexOfWineToUpdate >= 0) {
                         System.out.println("updating...");
-                        DB.set(indexOfWineToUpdate, new Wine(idWineToUpdate, newWine.getName(), newWine.getVintage(), newWine.getPrice(), newWine.getColor(), newWine.getType(), newWine.getAlcohol(), newWine.getQuantity(), newWine.getImage_pp()));
+                        DB.set(indexOfWineToUpdate,
+                                new Wine(newWine.getId(),
+                                        idWineToUpdate,
+                                        newWine.getBrandGrape(),
+                                        newWine.getWinery(),
+                                        newWine.getVintage(),
+                                        newWine.getPrice(),
+                                        newWine.getColor(),
+                                        newWine.getType(),
+                                        newWine.getAlcohol(),
+                                        newWine.getQuantity(),
+                                        newWine.getImage_pp()
+                                ));
                         return 1;
                     }
                     return 0;

@@ -3,7 +3,12 @@ package com.QRwineinventory.qrWineInventory.controllers;
 import com.QRwineinventory.qrWineInventory.models.Wine;
 import com.QRwineinventory.qrWineInventory.services.WineService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import java.util.List;
 import java.util.UUID;
@@ -12,21 +17,26 @@ import java.util.UUID;
 @RestController
 public class WineController {
 
-    private final WineService wineservice;
-
     @Autowired
-    public WineController(WineService wineservice) {
-        this.wineservice = wineservice;
-    }
+    private WineService wineservice;
 
     @PostMapping(path = "new")
-    public void addWine(@RequestBody Wine wine) {
+    public void addWine(@Valid @NotNull @RequestBody Wine wine) {
         wineservice.insertWine(wine);
     }
 
     @GetMapping(path = "all")
     public List<Wine> getAllWine() {
         return wineservice.getAllWine();
+    }
+
+    @GetMapping(path = "/index")
+    public ModelAndView index() {
+        ModelAndView model = new ModelAndView();
+        model.addObject("wines", wineservice.getAllWine());
+        model.setViewName("index");
+
+        return model;
     }
 
     @GetMapping(path = "{id}")
@@ -41,7 +51,7 @@ public class WineController {
     }
 
     @PutMapping(path = "update/{id}")
-    public void updateWine(@PathVariable("id") UUID id, @RequestBody Wine newWine) {
+    public void updateWine(@PathVariable("id") UUID id, @Valid @NonNull @RequestBody Wine newWine) {
         wineservice.updateWine(id, newWine);
     }
 }
