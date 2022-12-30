@@ -1,10 +1,8 @@
 package com.QRwineinventory.qrWineInventory.services;
 
-import com.QRwineinventory.qrWineInventory.daos.WineDao;
 import com.QRwineinventory.qrWineInventory.models.Wine;
 import com.QRwineinventory.qrWineInventory.repositories.WineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,12 +36,16 @@ public class WineService {
 
     public Wine updateWine(UUID wineId, Wine wine)
     {
-        Wine wineFromDB = wineRepository.findById(wineId).get();
+        Wine newWineToDB = new Wine();
+        Optional<Wine> wineFromDB = wineRepository.findById(wineId);
+        if (wineFromDB.isPresent()) {
+               newWineToDB = wineFromDB.get();
+        }
 
         if (Objects.nonNull(wine.getBrandGrape())
                 && !"".equalsIgnoreCase(
                 wine.getBrandGrape())) {
-            wineFromDB.setBrandGrape(
+            newWineToDB.setBrandGrape(
                     wine.getBrandGrape());
         }
 
@@ -51,44 +53,44 @@ public class WineService {
                 wine.getWinery())
                 && !"".equalsIgnoreCase(
                 wine.getWinery())) {
-            wineFromDB.setWinery(
+            newWineToDB.setWinery(
                     wine.getWinery());
         }
 
         if (Objects.nonNull(wine.getVintage())
                 && !"".equalsIgnoreCase(
                 wine.getVintage())) {
-            wineFromDB.setVintage(
+            newWineToDB.setVintage(
                     wine.getVintage());
         }
 
         if (Objects.nonNull(wine.getColor())
                 && !"".equalsIgnoreCase(
                 wine.getColor())) {
-            wineFromDB.setColor(
+            newWineToDB.setColor(
                     wine.getColor());
         }
 
         if (Objects.nonNull(wine.getType())
                 && !"".equalsIgnoreCase(
                 wine.getType())) {
-            wineFromDB.setType(
+            newWineToDB.setType(
                     wine.getType());
         }
 
         if (Objects.nonNull(wine.getImage_pp())
                 && !"".equalsIgnoreCase(
                 wine.getImage_pp())) {
-            wineFromDB.setImage_pp(
+            newWineToDB.setImage_pp(
                     wine.getImage_pp());
         }
 
-        wineFromDB.setPrice(wine.getPrice());
+        newWineToDB.setPrice(wine.getPrice());
 
-        wineFromDB.setQuantity(wine.getQuantity());
+        newWineToDB.setQuantity(wine.getQuantity());
 
-        wineFromDB.setAlcohol(wine.getAlcohol());
+        newWineToDB.setAlcohol(wine.getAlcohol());
 
-        return wineRepository.save(wineFromDB);
+        return wineRepository.save(newWineToDB);
     }
 }

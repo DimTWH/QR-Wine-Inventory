@@ -10,6 +10,7 @@
 
     <div class="container">
         <div class="content">
+            <#include "navbar.ftlh">
             <div class="table-container">
                 <table class="table is-striped is-hoverable">
                     <thead>
@@ -18,6 +19,7 @@
                         <th>Name</th>
                         <th>Quantity</th>
                         <th>Price</th>
+                        <th>Winery</th>
                         <th>Vintage</th>
                         <th>Color</th>
                         <th>Alcohol</th>
@@ -29,17 +31,20 @@
                     <#list wines as wine>
                         <tr>
                             <th scope="row">${wine.uid}</th>
-                            <td>${wine.brandGrape}</td>
-                            <td>${wine.quantity}</td>
-                            <td>€${wine.price}</td>
-                            <td>${wine.vintage}</td>
-                            <td>${wine.color}</td>
-                            <td>${wine.alcohol}</td>
-                            <td>${wine.type}</td>
+                                <td><#if wine.brandGrape?has_content>${wine.brandGrape}<#else>/</#if></td>
+                            <td><#if wine.quantity?has_content>${wine.quantity} bottles<#else>/</#if></td>
+                            <td><#if wine.price?has_content>€${wine.price}<#else>/</#if></td>
+                            <td><#if wine.winery?has_content>${wine.winery}<#else>/</#if></td>
+                            <td><#if wine.vintage?has_content>${wine.vintage}<#else>/</#if></td>
+                            <td><#if wine.color?has_content>${wine.color}<#else>/</#if></td>
+                            <td><#if wine.alcohol?has_content>${wine.alcohol}%<#else>/</#if></td>
+                            <td><#if wine.type?has_content>${wine.type}<#else>/</#if></td>
                             <td><a class="button is-small is-warning" role="button"
-                                   href="/update/${wine.uid}">Update</a>
+                                   href="updateWine/${wine.uid}">Update</a>
+                                <form method="delete">
                                 <a class="button is-small is-danger" role="button"
-                                   href="/delete/${wine.uid}">Delete</a></td>
+                                   href="delete/${wine.uid}">Delete</a></form>
+                            </td>
                         </tr>
                     </#list>
                     </tbody>
@@ -47,5 +52,7 @@
             </div>
         </div>
     </div>
+
+<#include "js/script.ftlh">
 </body>
 </html>

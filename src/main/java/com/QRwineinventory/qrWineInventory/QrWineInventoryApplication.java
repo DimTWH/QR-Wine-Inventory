@@ -7,7 +7,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 @SpringBootApplication
 public class QrWineInventoryApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(QrWineInventoryApplication.class, args);
 	}

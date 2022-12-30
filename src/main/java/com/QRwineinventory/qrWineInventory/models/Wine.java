@@ -9,12 +9,13 @@ import java.util.UUID;
 @Entity
 @Table(name = "wines")
 public class Wine implements Serializable {
-    @Id
+
     @GeneratedValue
     private int id;
+    @Id
     @Column(unique = true)
     private UUID uid;
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     @NotBlank
     private String brandGrape;
     @NotBlank
