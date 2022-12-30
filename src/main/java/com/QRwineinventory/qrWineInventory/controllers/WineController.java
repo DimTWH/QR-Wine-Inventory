@@ -97,6 +97,7 @@ public class WineController {
             model.setViewName("index");
         }
         return model;
+
     }
 
     @PostMapping("save")
