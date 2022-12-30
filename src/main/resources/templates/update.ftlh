@@ -11,7 +11,7 @@
 <div class="container">
     <#include "navbar.ftlh">
     <div class="content">
-        <form action="../updating/${wine.uid}" method="post">
+        <form action="save?idWOW=${wine.uid}" method="post">
             <div class="columns">
                 <div class="column"></div>
                 <div class="column">

@@ -1,7 +1,7 @@
 <#include "style.ftlh">
 <nav class="navbar" role="navigation" aria-label="main navigation" style="margin-bottom:1rem; border-bottom: 1px solid black">
     <div class="navbar-brand">
-        <a class="navbar-item" href="index">
+        <a class="navbar-item" href="http://localhost:8080/inventory/wine/index">
 <#--            <img src="logo" width="112" height="28">-->
         </a>
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
@@ -12,10 +12,10 @@
     </div>
     <div id="navbarBasicExample" class="navbar-menu">
         <div class="navbar-start">
-            <a class="navbar-item" href="index">
+            <a class="navbar-item" href="http://localhost:8080/inventory/wine/index">
                 Inventory
             </a>
-            <a class="navbar-item" href="new">
+            <a class="navbar-item" href="http://localhost:8080/inventory/wine/new">
                 Add new
             </a>
             <a class="navbar-item">

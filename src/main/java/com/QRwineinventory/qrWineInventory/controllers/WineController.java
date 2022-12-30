@@ -57,14 +57,24 @@ public class WineController {
         return model;
     }
 
-    @GetMapping(path = "{id}")
-    public Wine getWineById(@PathVariable("id") UUID id) {
-        return wineservice.getWineById(id)
-                .orElse(null);
+    @GetMapping
+    public ModelAndView getWineById(@RequestParam("id") UUID id) {
+        Optional<Wine> wineFound = wineservice.getWineById(id);
+        ModelAndView model = new ModelAndView();
+        if (wineFound.isPresent()) {
+            Wine wF = wineFound.get();
+            model.addObject("wine", wF);
+            model.setViewName("wineProfile");
+        }
+        else {
+            System.out.println("NOT FOUND");
+            model.setViewName("index");
+        }
+        return model;
     }
 
-    @GetMapping(path = "delete/{id}")
-    public ModelAndView deleteWineById(@PathVariable("id") UUID id) {
+    @GetMapping(path = "delete")
+    public ModelAndView deleteWineById(@RequestParam("id") UUID id) {
         System.out.println("deleting");
         wineservice.deleteWineById(id);
         String message = "Wine successfully deleted";
@@ -74,8 +84,8 @@ public class WineController {
         return model;
     }
 
-    @GetMapping("updateWine/{id}")
-    public ModelAndView getUpdateWinePage(@PathVariable("id") UUID id) {
+    @GetMapping("update")
+    public ModelAndView getUpdateWinePage(@RequestParam("id") UUID id) {
         Optional<Wine> wineFound = wineservice.getWineById(id);
         ModelAndView model = new ModelAndView();
         if (wineFound.isPresent()) {
@@ -89,13 +99,16 @@ public class WineController {
         return model;
     }
 
-    @PostMapping("updating/{id}")
-    public ModelAndView updateWine(@PathVariable("id") UUID id, @Valid @NonNull Wine newWine) {
+    @PostMapping("save")
+    public ModelAndView updateWine(@RequestParam("idWOW") UUID id, @Valid @NonNull Wine newWine) {
         System.out.println("herrrrrreeeeee");
         wineservice.updateWine(id, newWine);
 
-        ModelMap map = new ModelMap();
-        return index(map);
+        String message = "Wine successfully updated";
+        ModelAndView model = new ModelAndView();
+        model.addObject("message", message);
+        model.setViewName("redirect:index");
+        return model;
     }
 
 

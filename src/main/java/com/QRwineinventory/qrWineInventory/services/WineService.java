@@ -36,6 +36,7 @@ public class WineService {
 
     public Wine updateWine(UUID wineId, Wine wine)
     {
+        System.out.println("In Sssserviceee");
         Wine newWineToDB = new Wine();
         Optional<Wine> wineFromDB = wineRepository.findById(wineId);
         if (wineFromDB.isPresent()) {
