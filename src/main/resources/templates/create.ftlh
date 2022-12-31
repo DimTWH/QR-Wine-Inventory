@@ -29,21 +29,21 @@
                     <div class="field">
                         <label class="label">Quantity</label>
                         <div class="control">
-                            <input class="input" type="text" name="quantity" placeholder="Type here...">
+                            <input class="input" style="width: 150px;" type="number" name="quantity" placeholder="Type here...">
                         </div>
                     </div>
                     <div class="field">
                         <label class="label">Price</label>
                         <div class="control">
-                            <input class="input" type="text" name="price" placeholder="Type here...">
+                            <input class="input" style="width: 150px;" type="number" name="price" placeholder="Type here...">
                         </div>
                     </div>
                 </div>
                 <div class="column">
                     <div class="field">
                         <label class="label">Vintage</label>
-                        <div class="control">
-                            <input class="input" type="text" name="vintage" placeholder="Type here...">
+                        <div class="control is-center">
+                            <input class="input" style="width: 150px;" type="text" name="vintage" placeholder="Type here...">
                         </div>
                     </div>
                     <div class="field">

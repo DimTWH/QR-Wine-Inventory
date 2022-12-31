@@ -65,11 +65,9 @@
                             </td>
                         </tr>
                         <tr>
-                            <th style="background-color: #ff6969;">Code QR</th>
-                            <td>{!! QrCode::size(280)->generate("http://qrinv.ddns.net/QR-inventory/public/inventaire/pc/$pc->id" ); !!}
-                                <div class="form-group full-width">
-                                    <a href="{{ route('printpreviewPC_apart', $pc->id) }}" style="width: 280px" class=" btn btn-primary">Imprimer</a>
-                                </div>
+                            <th style="background-color: #ff6969;">QR code</th>
+                            <td>
+                                <img src="${QR}">
                             </td>
                         </tr>
                         </thead>

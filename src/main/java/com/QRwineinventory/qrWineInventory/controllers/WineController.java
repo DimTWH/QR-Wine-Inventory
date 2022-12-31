@@ -2,6 +2,12 @@ package com.QRwineinventory.qrWineInventory.controllers;
 
 import com.QRwineinventory.qrWineInventory.models.Wine;
 import com.QRwineinventory.qrWineInventory.services.WineService;
+
+import com.google.zxing.NotFoundException;
+import com.google.zxing.WriterException;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.ui.ModelMap;
@@ -12,14 +18,13 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import java.io.FileOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @RequestMapping("inventory/wine")
 @RestController
@@ -34,7 +39,7 @@ public class WineController {
         return model;
     }
     @PostMapping(path = "saveNew")
-    public ModelAndView addWine(@Valid @NotNull Wine wine) {
+    public ModelAndView addWine(@Valid @NotNull Wine wine) throws WriterException, IOException, NotFoundException {
         wineservice.insertWine(wine);
         ModelAndView model = new ModelAndView("redirect:new");
         return model;
@@ -45,9 +50,10 @@ public class WineController {
         return wineservice.getAllWine();
     }
 
-    @GetMapping(path = "/index")
-    public ModelAndView index(ModelMap map) {
+    @GetMapping(path = "index")
+    public ModelAndView index(@RequestParam(value = "search", required = false) String searchQuery, ModelMap map) throws IOException {
         ModelAndView model = new ModelAndView();
+
         model.addObject("wines", wineservice.getAllWine());
         model.setViewName("index");
 
@@ -58,13 +64,29 @@ public class WineController {
     }
 
     @GetMapping
-    public ModelAndView getWineById(@RequestParam("id") UUID id) {
+    public ModelAndView getWineById(@RequestParam("id") UUID id) throws IOException{
         Optional<Wine> wineFound = wineservice.getWineById(id);
         ModelAndView model = new ModelAndView();
         if (wineFound.isPresent()) {
             Wine wF = wineFound.get();
             model.addObject("wine", wF);
             model.setViewName("wineProfile");
+
+//          QR image
+            Path path = Paths.get("src/main/resources/pictures/"+wF.getImage_pp());
+            byte[] data = Files.readAllBytes(path);
+            byte[] encoded = Base64.getEncoder().encode(data);
+            String imgDataAsBase64 = new String(encoded);
+            String imgAsBase64 = "data:image/png;base64," + imgDataAsBase64;
+            model.addObject("QR", imgAsBase64);
+
+//          Logo image
+            Path pathLogo = Paths.get("src/main/resources/pictures/logo-h.png");
+            byte[] dataLogo = Files.readAllBytes(pathLogo);
+            byte[] encodedLogo = Base64.getEncoder().encode(dataLogo);
+            String imgDataAsBase64Logo = new String(encodedLogo);
+            String imgAsBase64Logo = "data:image/png;base64," + imgDataAsBase64Logo;
+            model.addObject("logo", imgAsBase64Logo);
         }
         else {
             System.out.println("NOT FOUND");
@@ -75,7 +97,6 @@ public class WineController {
 
     @GetMapping(path = "delete")
     public ModelAndView deleteWineById(@RequestParam("id") UUID id) {
-        System.out.println("deleting");
         wineservice.deleteWineById(id);
         String message = "Wine successfully deleted";
         ModelAndView model = new ModelAndView();
@@ -101,21 +122,21 @@ public class WineController {
     }
 
     @PostMapping("save")
-    public ModelAndView updateWine(@RequestParam("idWOW") UUID id, @Valid @NonNull Wine newWine) {
-        System.out.println("herrrrrreeeeee");
+    public ModelAndView updateWine(@RequestParam("id") UUID id, @Valid @NonNull Wine newWine) {
         wineservice.updateWine(id, newWine);
 
         String message = "Wine successfully updated";
         ModelAndView model = new ModelAndView();
         model.addObject("message", message);
         model.setViewName("redirect:index");
+
         return model;
     }
 
 
     @GetMapping("logo")
     public String getLogo() throws IOException {
-        Path path = Paths.get("C:\\Users\\DimHP\\Documents\\- EhB (hp)\\BATI 2\\Java Advanced\\qrWineInventory\\src\\main\\resources\\pictures\\logo-h.png");
+        Path path = Paths.get(WineController.class.getProtectionDomain().getCodeSource().getLocation()+"../../../resources/pictures/logo-h.png");
         byte[] data = Files.readAllBytes(path);
         byte[] encoded = Base64.getEncoder().encode(data);
         String imgDataAsBase64 = new String(encoded);
