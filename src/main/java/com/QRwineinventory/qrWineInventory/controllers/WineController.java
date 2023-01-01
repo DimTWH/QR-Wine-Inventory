@@ -42,6 +42,7 @@ public class WineController {
     public ModelAndView addWine(@Valid @NotNull Wine wine) throws WriterException, IOException, NotFoundException {
         wineservice.insertWine(wine);
         ModelAndView model = new ModelAndView("redirect:new");
+
         return model;
     }
 
@@ -71,22 +72,6 @@ public class WineController {
             Wine wF = wineFound.get();
             model.addObject("wine", wF);
             model.setViewName("wineProfile");
-
-//          QR image
-            Path path = Paths.get("src/main/resources/pictures/"+wF.getImage_pp());
-            byte[] data = Files.readAllBytes(path);
-            byte[] encoded = Base64.getEncoder().encode(data);
-            String imgDataAsBase64 = new String(encoded);
-            String imgAsBase64 = "data:image/png;base64," + imgDataAsBase64;
-            model.addObject("QR", imgAsBase64);
-
-//          Logo image
-            Path pathLogo = Paths.get("src/main/resources/pictures/logo-h.png");
-            byte[] dataLogo = Files.readAllBytes(pathLogo);
-            byte[] encodedLogo = Base64.getEncoder().encode(dataLogo);
-            String imgDataAsBase64Logo = new String(encodedLogo);
-            String imgAsBase64Logo = "data:image/png;base64," + imgDataAsBase64Logo;
-            model.addObject("logo", imgAsBase64Logo);
         }
         else {
             System.out.println("NOT FOUND");
@@ -96,17 +81,16 @@ public class WineController {
     }
 
     @GetMapping(path = "delete")
-    public ModelAndView deleteWineById(@RequestParam("id") UUID id) {
+    public ModelAndView deleteWineById(@RequestParam("id") UUID id) throws IOException {
         wineservice.deleteWineById(id);
-        String message = "Wine successfully deleted";
         ModelAndView model = new ModelAndView();
-        model.addObject("message", message);
-        model.setViewName("redirect:../index");
+        model.setViewName("redirect:index");
+
         return model;
     }
 
     @GetMapping("update")
-    public ModelAndView getUpdateWinePage(@RequestParam("id") UUID id) {
+    public ModelAndView getUpdateWinePage(@RequestParam("id") UUID id) throws IOException {
         Optional<Wine> wineFound = wineservice.getWineById(id);
         ModelAndView model = new ModelAndView();
         if (wineFound.isPresent()) {
@@ -134,14 +118,15 @@ public class WineController {
     }
 
 
-    @GetMapping("logo")
-    public String getLogo() throws IOException {
-        Path path = Paths.get(WineController.class.getProtectionDomain().getCodeSource().getLocation()+"../../../resources/pictures/logo-h.png");
-        byte[] data = Files.readAllBytes(path);
-        byte[] encoded = Base64.getEncoder().encode(data);
-        String imgDataAsBase64 = new String(encoded);
-        String imgAsBase64 = "data:image/png;base64," + imgDataAsBase64;
-
-        return imgAsBase64;
-    }
+//    @GetMapping("logo")
+//    public String getLogo() throws IOException {
+//        //          Logo image
+//        Path pathLogo = Paths.get("src/main/resources/pictures/logo-h.png");
+//        byte[] dataLogo = Files.readAllBytes(pathLogo);
+//        byte[] encodedLogo = Base64.getEncoder().encode(dataLogo);
+//        String imgDataAsBase64Logo = new String(encodedLogo);
+//        String imgAsBase64Logo = "data:image/png;base64," + imgDataAsBase64Logo;
+//
+//        return imgAsBase64Logo;
+//    }
 }

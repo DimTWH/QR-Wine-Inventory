@@ -16,7 +16,7 @@ public class WineDataAccessService implements WineDao{
 
     @Override
     public List<Wine> selectAllWine() {
-        return List.of(new Wine(1, UUID.randomUUID(), "Lupi", "Merlot Cabernet Sauvignon", "Gitana", 18, "red", "dry", 14, 12, "url/images/pp"));
+        return List.of(new Wine(UUID.randomUUID(), "Lupi", "Merlot Cabernet Sauvignon", "Gitana", 18, "red", "dry", 14, 12, "url/images/pp"));
     }
 
     @Override

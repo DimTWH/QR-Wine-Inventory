@@ -13,7 +13,7 @@ public class FakeWineDataAccessService implements WineDao{
     private final static List<Wine> DB = new ArrayList<>();
     @Override
     public int insertWine(UUID id, Wine wine) {
-        DB.add(new Wine(wine.getId(), id, wine.getBrandGrape(), wine.getWinery(), wine.getVintage(), wine.getPrice(), wine.getColor(), wine.getType(), wine.getAlcohol(), wine.getQuantity(), wine.getImage_pp()));
+        DB.add(new Wine(id, wine.getBrandGrape(), wine.getWinery(), wine.getVintage(), wine.getPrice(), wine.getColor(), wine.getType(), wine.getAlcohol(), wine.getQuantity(), wine.getImage_pp()));
         return 1;
     }
 
@@ -47,8 +47,7 @@ public class FakeWineDataAccessService implements WineDao{
                     if (indexOfWineToUpdate >= 0) {
                         System.out.println("updating...");
                         DB.set(indexOfWineToUpdate,
-                                new Wine(newWine.getId(),
-                                        idWineToUpdate,
+                                new Wine(idWineToUpdate,
                                         newWine.getBrandGrape(),
                                         newWine.getWinery(),
                                         newWine.getVintage(),

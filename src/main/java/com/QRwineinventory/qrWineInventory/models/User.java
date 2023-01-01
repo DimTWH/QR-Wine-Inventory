@@ -11,51 +11,40 @@ import java.util.UUID;
 @Table(name = "users")
 public class User implements Serializable {
     @Id
-    @Column(unique = true)
-    private UUID uid;
-    @Column(nullable = false)
-    @NotBlank
-    private String name;
-
-    @Column(nullable = false, unique = true)
-    @NotBlank
-    private String email;
-    @Column(nullable = false)
-    @NotBlank
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+    private String userName;
     private String password;
+    private boolean active;
+    private String roles;
+    private String profileImage;
 
-    public User(@JsonProperty("uid") UUID uid,
-                @JsonProperty("name") String name,
-                @JsonProperty("email") String email,
-                @JsonProperty("password") String password) {
-        this.uid = uid;
-        this.name = name;
-        this.email = email;
+    public User(String userName, String password, boolean active, String roles, String profileImage) {
+        this.userName = userName;
         this.password = password;
+        this.active = active;
+        this.roles = roles;
+        this.profileImage = profileImage;
     }
 
-    public UUID getUid() {
-        return uid;
+    public User() {
+
     }
 
-    public void setUid(UUID uid) {
-        this.uid = uid;
+    public int getId() {
+        return id;
     }
 
-    public String getName() {
-        return name;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getUserName() {
+        return userName;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPassword() {
@@ -64,5 +53,29 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public String getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String roles) {
+        this.roles = roles;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 }

@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 @Service
@@ -41,7 +44,6 @@ public class WineService {
         hashMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
         // Create the QR code and save
         // in the specified folder
-        // as a jpg file
         createQR(data, path, charset, hashMap, 200, 200);
         wine.setImage_pp(path);
         return wineRepository.save(wine);
@@ -55,8 +57,24 @@ public class WineService {
         return wineRepository.findById(id);
     }
 
-    public void deleteWineById(UUID id) {
+    public boolean deleteWineById(UUID id) {
         wineRepository.deleteById(id);
+        Path root = Paths.get("src/main/resources/pictures");
+        Optional<Wine> wineFound = getWineById(id);
+        Wine wine;
+        String filename = "";
+        if (wineFound.isPresent())
+        {
+            wine = wineFound.get();
+            filename = wine.getImage_pp();
+        }
+        try {
+            Path file = root.resolve(filename);
+            return Files.deleteIfExists(file);
+        } catch (IOException e) {
+            System.out.println("Filename might be empty because no wine has been found with this uID");
+            throw new RuntimeException("Error: " + e.getMessage());
+        }
     }
 
     public Wine updateWine(UUID wineId, Wine wine)

@@ -9,9 +9,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "wines")
 public class Wine implements Serializable {
-
-    @GeneratedValue
-    private int id;
     @Id
     @Column(unique = true)
     private UUID uid;
@@ -37,8 +34,7 @@ public class Wine implements Serializable {
     private int quantity;
 
 
-    public Wine(@JsonProperty("id") int id,
-                @JsonProperty("uid") UUID uid,
+    public Wine(@JsonProperty("uid") UUID uid,
                 @JsonProperty("brandGrape") String brandGrape,
                 @JsonProperty("winery") String winery,
                 @JsonProperty("vintage") String vintage,
@@ -48,7 +44,6 @@ public class Wine implements Serializable {
                 @JsonProperty("alcohol") float alcohol,
                 @JsonProperty("quantity") int quantity,
                 @JsonProperty("image_pp") String image_pp) {
-        this.id = id;
         this.uid = uid;
         this.brandGrape = brandGrape;
         this.winery = winery;
@@ -62,14 +57,6 @@ public class Wine implements Serializable {
     }
 
     public Wine() {}
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public UUID getUid() {
         return uid;

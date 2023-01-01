@@ -67,7 +67,7 @@
                         <tr>
                             <th style="background-color: #ff6969;">QR code</th>
                             <td>
-                                <img src="${QR}">
+                                <img src="/pictures/${wine.image_pp}">
                             </td>
                         </tr>
                         </thead>

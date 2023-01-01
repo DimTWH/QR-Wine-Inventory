@@ -3,8 +3,9 @@
         height: 100%;
     }
     body {
+        height: 100%;
         /* Location of the image */
-        background-image: url(pictures/background.jpg);
+        background-image: url(/pictures/background.jpg);
         /* Background image is centered vertically and horizontally at all times */
         background-position: center center;
         /* Background image doesn’t tile */

@@ -13,7 +13,7 @@
         <form action="saveNew" method="post">
             <div class="columns">
                 <div class="column"></div>
-                <div class="column">
+                <div class="column" style="background-color: white; padding: 2rem">
                     <div class="field">
                         <label class="label">Brand or Grape(s)</label>
                         <div class="control">
@@ -29,21 +29,21 @@
                     <div class="field">
                         <label class="label">Quantity</label>
                         <div class="control">
-                            <input class="input" style="width: 150px;" type="number" name="quantity" placeholder="Type here...">
+                            <input class="input" style="width: 50%;" type="number" name="quantity" placeholder="Type here...">
                         </div>
                     </div>
                     <div class="field">
                         <label class="label">Price</label>
                         <div class="control">
-                            <input class="input" style="width: 150px;" type="number" name="price" placeholder="Type here...">
+                            <input class="input" style="width: 50%;" type="number" name="price" placeholder="Type here...">
                         </div>
                     </div>
                 </div>
-                <div class="column">
+                <div class="column" style="background-color: white; padding: 2rem">
                     <div class="field">
                         <label class="label">Vintage</label>
                         <div class="control is-center">
-                            <input class="input" style="width: 150px;" type="text" name="vintage" placeholder="Type here...">
+                            <input class="input" style="width: 50%;" type="text" name="vintage" placeholder="Type here...">
                         </div>
                     </div>
                     <div class="field">
@@ -64,13 +64,8 @@
                             <input class="input" type="text" name="type" placeholder="Type here...">
                         </div>
                     </div>
-                    <div class="field is-grouped">
-                        <div class="control">
-                            <a href="index is-right">
-                                <button class="button is-link is-light">Cancel</button>
-                            </a>
-                        </div>
-                        <div class="control">
+                    <div class="field is-right">
+                        <div class="control is-right">
                             <button class="button is-link is-right" type="submit">Submit</button>
                         </div>
                     </div>
