@@ -1,15 +1,14 @@
 package com.QRwineinventory.qrWineInventory.services;
 
+import com.QRwineinventory.qrWineInventory.exceptions.PasswordConfirmationException;
 import com.QRwineinventory.qrWineInventory.models.User;
 import com.QRwineinventory.qrWineInventory.models.MyUserDetails;
 import com.QRwineinventory.qrWineInventory.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.password4j.Password;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.userdetails.UserDetails;
-
-
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,10 +17,13 @@ import java.nio.file.Paths;
 import java.util.*;
 
 @Service
-public class MyUserDetailsService implements UserDetailsService {
+public class UserService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
 
     @Override
@@ -35,8 +37,19 @@ public class MyUserDetailsService implements UserDetailsService {
 
 
 
-    public User insertUser(User user) {
-        return userRepository.save(user);
+    public void insertUser(User user, String confirmPassword) throws PasswordConfirmationException {
+        if (user.getPassword().equals(confirmPassword)) {
+            user.setPassword(Password.hash(user.getPassword())
+                    .addPepper("QR-WineInv")
+                    .addRandomSalt(32)
+                    .withArgon2().getResult());
+            user.setRoles("ROLE_USER");
+            user.setActive(true);
+            userRepository.save(user);
+        }
+        else {
+            throw new PasswordConfirmationException("Password is not confirmed correctly");
+        }
     }
 
     public Optional<User> getUserById(int id) {

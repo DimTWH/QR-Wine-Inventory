@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.UUID;
 @Entity
 @Table(name = "wines")
@@ -14,7 +15,7 @@ public class Wine implements Serializable {
     private UUID uid;
     @Column(nullable = false)
     @NotBlank
-    private String brandGrape;
+    private String brand_grape;
     @NotBlank
     private String winery;
     @NotBlank
@@ -27,25 +28,25 @@ public class Wine implements Serializable {
 
     @Column(nullable = false, length = 10)
     @NotBlank
-    private float price;
+    private double price;
     @NotBlank
-    private float alcohol;
+    private double alcohol;
     @NotBlank
     private int quantity;
 
 
     public Wine(@JsonProperty("uid") UUID uid,
-                @JsonProperty("brandGrape") String brandGrape,
+                @JsonProperty("brandGrape") String brand_grape,
                 @JsonProperty("winery") String winery,
                 @JsonProperty("vintage") String vintage,
-                @JsonProperty("price") float price,
+                @JsonProperty("price") double price,
                 @JsonProperty("color") String color,
                 @JsonProperty("type") String type,
-                @JsonProperty("alcohol") float alcohol,
+                @JsonProperty("alcohol") double alcohol,
                 @JsonProperty("quantity") int quantity,
                 @JsonProperty("image_pp") String image_pp) {
         this.uid = uid;
-        this.brandGrape = brandGrape;
+        this.brand_grape = brand_grape;
         this.winery = winery;
         this.vintage = vintage;
         this.price = price;
@@ -66,12 +67,12 @@ public class Wine implements Serializable {
         this.uid = uid;
     }
 
-    public String getBrandGrape() {
-        return brandGrape;
+    public String getBrand_grape() {
+        return brand_grape;
     }
 
-    public void setBrandGrape(String brandGrape) {
-        this.brandGrape = brandGrape;
+    public void setBrand_grape(String brandGrape) {
+        this.brand_grape = brandGrape;
     }
 
     public String getWinery() {
@@ -114,19 +115,19 @@ public class Wine implements Serializable {
         this.image_pp = image_pp;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public float getAlcohol() {
+    public double getAlcohol() {
         return alcohol;
     }
 
-    public void setAlcohol(float alcohol) {
+    public void setAlcohol(double alcohol) {
         this.alcohol = alcohol;
     }
 
@@ -136,5 +137,17 @@ public class Wine implements Serializable {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Wine wine = (Wine) o;
+        return uid.equals(wine.uid);
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(uid);
     }
 }

@@ -7,8 +7,8 @@
     <title>Wine Profile | QR Wine Inventory</title>
 </head>
 <body>
+<#include "navbar.ftlh">
 <div class="container">
-    <#include "navbar.ftlh">
     <div class="content">
         <div class="columns">
             <div class="column"></div>
@@ -16,6 +16,17 @@
                 <div class="table-container">
                     <table class="table is-striped is-hoverable">
                         <thead>
+                        <tr>
+                            <th style="background-color: #ff6969;">Wine actions</th>
+                            <td>
+                                <a class="button is-small is-warning" role="button"
+                                   href="http://localhost:8080/inventory/wine/update?id=${wine.uid}">Update</a>
+                                <form method="delete">
+                                    <a class="button is-small is-danger" role="button"
+                                       href="http://localhost:8080/inventory/wine/delete?id=${wine.uid}">Delete</a>
+                                </form>
+                            </td>
+                        </tr>
                         <tr>
                             <th class="black" style="background-color: #ff6969;width: 150px">Wine ID</th>
                             <td>
@@ -25,7 +36,7 @@
                         <tr>
                             <th style="background-color: #ff6969;">Brand or Grape(s)</th>
                             <td>
-                                ${wine.brandGrape}
+                                ${wine.brand_grape}
                             </td>
                         </tr>
                         <tr>

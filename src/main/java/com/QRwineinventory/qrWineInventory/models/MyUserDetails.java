@@ -1,5 +1,6 @@
 package com.QRwineinventory.qrWineInventory.models;
 
+import com.password4j.Hash;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,10 +12,10 @@ import java.util.stream.Collectors;
 
 public class MyUserDetails implements UserDetails {
 
-    private String userName;
-    private String password;
-    private boolean active;
-    private List<GrantedAuthority> authorities;
+    private final String userName;
+    private final String password;
+    private final boolean active;
+    private final List<GrantedAuthority> authorities;
 
     public MyUserDetails(User user) {
         this.userName = user.getUserName();

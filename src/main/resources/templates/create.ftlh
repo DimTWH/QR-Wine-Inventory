@@ -6,9 +6,8 @@
     <title>Add New Wine | QR Wine Inventory</title>
 </head>
 <body>
-
+<#include "navbar.ftlh">
 <div class="container is-max-widescreen">
-    <#include "navbar.ftlh">
     <div class="content">
         <form action="saveNew" method="post">
             <div class="columns">
@@ -17,7 +16,7 @@
                     <div class="field">
                         <label class="label">Brand or Grape(s)</label>
                         <div class="control">
-                            <input class="input" type="text" name="brandGrape" placeholder="Type here...">
+                            <input class="input" type="text" name="brand_grape" placeholder="Type here...">
                         </div>
                     </div>
                     <div class="field">
@@ -29,7 +28,7 @@
                     <div class="field">
                         <label class="label">Quantity</label>
                         <div class="control">
-                            <input class="input" style="width: 50%;" type="number" name="quantity" placeholder="Type here...">
+                            <input class="input" style="width: 50%;" type="number" min="0" name="quantity" placeholder="Type here...">
                         </div>
                     </div>
                     <div class="field">

@@ -1,61 +1,128 @@
 package com.QRwineinventory.qrWineInventory.controllers;
 
+import com.QRwineinventory.qrWineInventory.exceptions.InvalidSellingQuantity;
 import com.QRwineinventory.qrWineInventory.models.Wine;
 import com.QRwineinventory.qrWineInventory.services.WineService;
 
-import com.google.zxing.NotFoundException;
 import com.google.zxing.WriterException;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import java.io.FileOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 @RequestMapping("inventory/wine")
 @RestController
 public class WineController {
 
-    @Autowired
-    private WineService wineservice;
+    private final WineService wineservice;
+
+    public WineController(WineService wineservice) {
+        this.wineservice = wineservice;
+    }
 
     @GetMapping("new")
     public ModelAndView getAddWinePage() {
-        ModelAndView model = new ModelAndView("create");
-        return model;
-    }
-    @PostMapping(path = "saveNew")
-    public ModelAndView addWine(@Valid @NotNull Wine wine) throws WriterException, IOException, NotFoundException {
-        wineservice.insertWine(wine);
-        ModelAndView model = new ModelAndView("redirect:new");
-
+        ModelAndView model = new ModelAndView();
+        model.addObject("search", "");
+        model.setViewName("create");
         return model;
     }
 
-    @GetMapping(path = "all")
-    public List<Wine> getAllWine() {
-        return wineservice.getAllWine();
+    @PostMapping("saveNew")
+    public ModelAndView addWine(@Valid @NotNull Wine wine)
+            throws WriterException, IOException {
+        wineservice.insertWine(wine, null);
+        return new ModelAndView("redirect:new");
+    }
+
+    @GetMapping("sell")
+    public ModelAndView getWineSellingPage(@RequestParam("id") UUID id) throws IOException {
+        Optional<Wine> wineFound = wineservice.getWineById(id);
+        ModelAndView model = new ModelAndView();
+        if (wineFound.isPresent()) {
+            Wine wF = wineFound.get();
+            model.addObject("wine", wF);
+            model.addObject("search", "");
+            model.setViewName("sellWine");
+        }
+        else {
+            model.setViewName("redirect:index");
+        }
+        return model;
+    }
+
+    @PostMapping("sellWine")
+    public ModelAndView sellWine(@RequestParam("id")UUID id, @Valid @NotNull Wine currentlySoldWine) throws InvalidSellingQuantity {
+        wineservice.sellWine(id, currentlySoldWine);
+        ModelAndView model = new ModelAndView();
+        model.addObject("search", "");
+        model.setViewName("redirect:index");
+        return model;
+    }
+
+    @GetMapping("restock")
+    public ModelAndView getWineRestockingPage(@RequestParam("id") UUID id) throws IOException {
+        Optional<Wine> wineFound = wineservice.getWineById(id);
+        ModelAndView model = new ModelAndView();
+        if (wineFound.isPresent()) {
+            Wine wF = wineFound.get();
+            model.addObject("wine", wF);
+            model.addObject("search", "");
+            model.setViewName("restockWine");
+        }
+        else {
+            model.setViewName("redirect:index");
+        }
+        return model;
+    }
+
+    @PostMapping("restockWine")
+    public ModelAndView restockWine(@RequestParam("id")UUID id, @Valid @NotNull Wine currentlyRestockedWine) throws InvalidSellingQuantity {
+        wineservice.restockWine(id, currentlyRestockedWine);
+        ModelAndView model = new ModelAndView();
+        model.addObject("search", "");
+        model.setViewName("redirect:index");
+        return model;
     }
 
     @GetMapping(path = "index")
     public ModelAndView index(@RequestParam(value = "search", required = false) String searchQuery, ModelMap map) throws IOException {
-        ModelAndView model = new ModelAndView();
+        List<Wine> wineList = new ArrayList<>();
+        if (searchQuery != null && !searchQuery.equals("")) {
+            String[] searchTermsArray = searchQuery.trim().split(" ");
+            for (String sT : searchTermsArray) {
+                System.out.println(sT.toLowerCase());
 
-        model.addObject("wines", wineservice.getAllWine());
+                List<Wine> resForWord = wineservice.getAllWine(sT.toLowerCase());
+
+                if (wineList.size() == 0) wineList.addAll(resForWord);
+                else {
+                    for (Wine wRes : resForWord) {
+                        for (int j = 0; j < wineList.size(); j++) {
+                            Wine wList = wineList.get(j);
+                            if (!wRes.equals(wList)) wineList.add(wRes);
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            wineList = wineservice.getAllWine("");
+        }
+
+        ModelAndView model = new ModelAndView();
+        model.addObject("wines", wineList);
+        if (searchQuery == null) model.addObject("search", "");
+        else model.addObject("search", searchQuery);
+
         model.setViewName("index");
 
         if (!map.isEmpty()) model.addObject("message", map.getAttribute("message"));
@@ -71,18 +138,20 @@ public class WineController {
         if (wineFound.isPresent()) {
             Wine wF = wineFound.get();
             model.addObject("wine", wF);
+            model.addObject("search", "");
             model.setViewName("wineProfile");
         }
         else {
             System.out.println("NOT FOUND");
-            model.setViewName("index");
+            model.setViewName("redirect:index");
         }
         return model;
     }
 
     @GetMapping(path = "delete")
-    public ModelAndView deleteWineById(@RequestParam("id") UUID id) throws IOException {
-        wineservice.deleteWineById(id);
+    public ModelAndView deleteWineById(@RequestParam("id") UUID id) {
+
+        System.out.println("file deleted: "+ wineservice.deleteWineById(id));
         ModelAndView model = new ModelAndView();
         model.setViewName("redirect:index");
 
@@ -96,13 +165,13 @@ public class WineController {
         if (wineFound.isPresent()) {
             Wine wF = wineFound.get();
             model.addObject("wine", wF);
+            model.addObject("search", "");
             model.setViewName("update");
         }
         else {
-            model.setViewName("index");
+            model.setViewName("redirect:index");
         }
         return model;
-
     }
 
     @PostMapping("save")

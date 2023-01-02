@@ -7,18 +7,17 @@
     <title>Update Wine | QR Wine Inventory</title>
 </head>
 <body>
-
+<#include "navbar.ftlh">
 <div class="container">
-    <#include "navbar.ftlh">
     <div class="content">
         <form action="save?id=${wine.uid}" method="post">
             <div class="columns">
                 <div class="column"></div>
-                <div class="column">
+                <div class="column" style="background-color: white; padding: 2rem">
                     <div class="field">
                         <label class="label">Brand or Grape(s)</label>
                         <div class="control">
-                            <input class="input" type="text" name="brandGrape" placeholder="Type here..." value="${wine.brandGrape}">
+                            <input class="input" type="text" name="brand_grape" placeholder="Type here..." value="${wine.brand_grape}">
                         </div>
                     </div>
                     <div class="field">
@@ -30,7 +29,7 @@
                     <div class="field">
                         <label class="label">Quantity</label>
                         <div class="control">
-                            <input class="input" type="text" name="quantity" placeholder="Type here..." value="${wine.quantity}">
+                            <input class="input" type="text" min="0" name="quantity" placeholder="Type here..." value="${wine.quantity}">
                         </div>
                     </div>
                     <div class="field">
@@ -40,7 +39,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="column">
+                <div class="column" style="background-color: white; padding: 2rem">
                     <div class="field">
                         <label class="label">Vintage</label>
                         <div class="control">
@@ -65,12 +64,12 @@
                             <input class="input" type="text" name="type" placeholder="Type here..." value="${wine.type}">
                         </div>
                     </div>
-                    <div class="field is-grouped">
+                    <div class="field">
                         <div class="control">
-                            <a href="index">
-                                <button class="button is-link is-light">Cancel</button>
-                            </a>
+                            <a href="http://localhost:8080/inventory/wine?id=${wine.uid}" class="button is-link is-light">Cancel</a>
                         </div>
+                    </div>
+                    <div class="field">
                         <div class="control">
                             <button class="button is-link" type="submit">Submit</button>
                         </div>
